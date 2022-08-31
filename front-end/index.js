@@ -1,5 +1,17 @@
 let todos = [];
 
+function initialize() {
+  getTodos();
+}
+
+function getTodos() {
+  // Call the server on GET /todos
+  const serverUrl = "http://localhost:3000/todos";
+  fetch(serverUrl)
+    .then((response) => response.json())
+    .then((res) => console.log(res));
+}
+
 function onAdd() {
   const id = randomIntFromInterval(10000000000000);
   const taskName = document.getElementById("task-name").value;
