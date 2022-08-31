@@ -1,53 +1,48 @@
-// map()
-const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const result = [];
-values.forEach((value) => {
-  result.push(value * 10);
-});
-console.log(result);
+let todos = [];
 
-// pointer -> value
-const obj = {
-  fname: "Mihir",
-};
-
-obj.fname = "Something";
-
-const original = [1, 2, 3];
-
-for (let i = 0; i < 3; i++) {
-  original[i] = original[i] * 10;
+function onAdd() {
+  const id = randomIntFromInterval(10000000000000);
+  const taskName = document.getElementById("task-name").value;
+  addToTodo(taskName, id);
+  addToList(taskName, id);
 }
 
-console.log(original);
+function addToTodo(taskName, id) {
+  todos.push({
+    id: id,
+    taskName: taskName,
+  });
+}
 
-// no mutatation - immutable
-const resultWithMap = values.map((value) => value * 10);
-console.log(values);
-console.log(resultWithMap);
+function addToList(taskName, id) {
+  const todoListNode = document.getElementById("todo-list");
+  todoListNode.appendChild(createListItem(taskName, id));
+}
 
-// filter()
+function createListItem(taskName, id) {
+  const li = document.createElement("li");
+  li.id = id;
+  li.appendChild(createTextNode(taskName));
+  li.appendChild(createDeleteButton(id));
+  return li;
+}
 
-const students = ["Student1", "Student2", "Student3", "Mihir"];
+function createTextNode(taskName) {
+  return document.createTextNode(taskName);
+}
 
-const newArray = students.filter((student) => student !== "Mihir");
+function createDeleteButton(id) {
+  const button = document.createElement("button");
+  button.onclick = onDelete.bind(this, id);
+  button.appendChild(document.createTextNode("Delete"));
+  return button;
+}
 
-console.log(newArray);
+function onDelete(id) {
+  todos = todos.filter((todo) => todo.id !== id);
+  document.getElementById(id).remove();
+}
 
-const costs = [1, 2, -1, -5, 3, 5, 10, 0];
-
-const cleanedUpCosts = costs.filter((cost) => cost <= 0);
-console.log(cleanedUpCosts);
-
-// map & filter()
-
-const numbers = [1, 2, 3, 4, 5];
-
-console.log(
-  numbers
-    .filter((number) => number !== 2)
-    .map((number) => number * 10)
-    .map((number) => number * 100)
-);
-
-// reduce()
+function randomIntFromInterval(max) {
+  return Math.floor(Math.random() * (max + 1));
+}
