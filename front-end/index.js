@@ -1,5 +1,11 @@
 let todos = [];
 
+setInterval(() => {
+  console.log("todos", todos);
+}, 1000);
+
+initialize();
+
 function initialize() {
   getTodos();
 }
@@ -8,9 +14,20 @@ function getTodos() {
   // Call the server on GET /todos
   const serverUrl = "http://localhost:3000/todos";
   fetch(serverUrl)
-    .then((response) => response.json())
-    .then((res) => console.log(res));
+    .then((response) => {
+      console.log(response);
+      return response.json();
+    })
+    .then((res) => {
+      todos = res;
+      console.log("Todos should be set to server response");
+    })
+    .catch((error) => console.error("ERROR!!!!"));
 }
+
+setTimeout(() => {
+  while (true) {}
+}, 10000);
 
 function onAdd() {
   const id = randomIntFromInterval(10000000000000);

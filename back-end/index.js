@@ -5,11 +5,13 @@ app.use(cors());
 const port = 3000;
 
 app.get("/todos", (req, res) => {
-  res.send([
-    { id: "1", taskName: "Task 1" },
-    { id: "2", taskName: "Task 2" },
-    { id: "3", taskName: "Task 3" },
-  ]);
+  setTimeout(() => {
+    res.send([
+      { id: "1", taskName: "Task 1" },
+      { id: "2", taskName: "Task 2" },
+      { id: "3", taskName: "Task 3" },
+    ]);
+  }, 5000);
 });
 
 app.post("/todo", (req, res) => {
