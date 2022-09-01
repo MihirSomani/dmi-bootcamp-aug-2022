@@ -1,4 +1,6 @@
-let todos: { taskName: string; id: string }[] = [];
+type Todo = { taskName: string; id: string };
+
+let todos: Todo[] = [];
 
 initialize();
 
@@ -10,7 +12,7 @@ function getTodos() {
   const serverUrl = "http://localhost:3000/todos";
   return fetch(serverUrl)
     .then((response) => response.json())
-    .then((serverTodos: { taskName: string; id: string }[]) => {
+    .then((serverTodos: Todo[]) => {
       serverTodos.forEach((serverTodo) => {
         addToTodo(serverTodo.taskName, serverTodo.id);
         addToList(serverTodo.taskName, serverTodo.id);
