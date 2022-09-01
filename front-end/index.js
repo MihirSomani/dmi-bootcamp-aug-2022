@@ -1,9 +1,5 @@
 let todos = [];
 
-setInterval(() => {
-  console.log("todos", todos);
-}, 1000);
-
 initialize();
 
 function initialize() {
@@ -11,29 +7,30 @@ function initialize() {
 }
 
 function getTodos() {
-  // Call the server on GET /todos
   const serverUrl = "http://localhost:3000/todos";
-  fetch(serverUrl)
-    .then((response) => {
-      console.log(response);
-      return response.json();
-    })
-    .then((res) => {
-      todos = res;
-      console.log("Todos should be set to server response");
-    })
-    .catch((error) => console.error("ERROR!!!!"));
+  return fetch(serverUrl)
+    .then((response) => response.json())
+    .then((serverTodos) => {
+      serverTodos.forEach((serverTodo) => {
+        addToTodo(serverTodo.taskName, serverTodo.id);
+        addToList(serverTodo.taskName, serverTodo.id);
+      });
+    });
 }
 
-setTimeout(() => {
-  while (true) {}
-}, 10000);
-
 function onAdd() {
-  const id = randomIntFromInterval(10000000000000);
-  const taskName = document.getElementById("task-name").value;
-  addToTodo(taskName, id);
-  addToList(taskName, id);
+  // const taskName = document.getElementById("task-name").value;
+  addTodoToServer().then(() =>
+    getTodos().then(() =>
+      console.log("Added todo to server and re-fetched all todos")
+    )
+  );
+}
+
+function addTodoToServer() {
+  return fetch("http://localhost:3000/todo", {
+    method: "POST",
+  });
 }
 
 function addToTodo(taskName, id) {
