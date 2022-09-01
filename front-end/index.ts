@@ -1,4 +1,4 @@
-let todos = [];
+let todos: { taskName: string; id: string }[] = [];
 
 initialize();
 
@@ -10,7 +10,7 @@ function getTodos() {
   const serverUrl = "http://localhost:3000/todos";
   return fetch(serverUrl)
     .then((response) => response.json())
-    .then((serverTodos) => {
+    .then((serverTodos: { taskName: string; id: string }[]) => {
       serverTodos.forEach((serverTodo) => {
         addToTodo(serverTodo.taskName, serverTodo.id);
         addToList(serverTodo.taskName, serverTodo.id);
@@ -33,19 +33,23 @@ function addTodoToServer() {
   });
 }
 
-function addToTodo(taskName, id) {
+function addToTodo(taskName: string, id: string) {
   todos.push({
     id: id,
     taskName: taskName,
   });
 }
 
-function addToList(taskName, id) {
+function addToList(taskName: string, id: string) {
   const todoListNode = document.getElementById("todo-list");
-  todoListNode.appendChild(createListItem(taskName, id));
+  if (todoListNode === null) {
+    console.error("WTF?");
+  } else {
+    todoListNode.appendChild(createListItem(taskName, id));
+  }
 }
 
-function createListItem(taskName, id) {
+function createListItem(taskName: string, id: string) {
   const li = document.createElement("li");
   li.id = id;
   li.appendChild(createTextNode(taskName));
@@ -53,22 +57,22 @@ function createListItem(taskName, id) {
   return li;
 }
 
-function createTextNode(taskName) {
+function createTextNode(taskName: string) {
   return document.createTextNode(taskName);
 }
 
-function createDeleteButton(id) {
+function createDeleteButton(this: any, id: string) {
   const button = document.createElement("button");
   button.onclick = onDelete.bind(this, id);
   button.appendChild(document.createTextNode("Delete"));
   return button;
 }
 
-function onDelete(id) {
+function onDelete(id: string) {
   todos = todos.filter((todo) => todo.id !== id);
-  document.getElementById(id).remove();
+  document.getElementById(id)?.remove();
 }
 
-function randomIntFromInterval(max) {
+function randomIntFromInterval(max: number) {
   return Math.floor(Math.random() * (max + 1));
 }
